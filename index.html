@@ -502,6 +502,29 @@ rasiData.forEach(rasi => {
       const padaIndex = Math.floor(totalSeconds / (60 * padaSize)) + 1;
       return padaIndex; // from 1 to 108
     }
+function getMoonPadaIndex(moon_deg, moon_min, moon_sec) {
+  // Convert to decimal degrees
+  let degree = Number(moon_deg) + Number(moon_min)/60 + Number(moon_sec)/3600;
+  // Each nakshatra is 13°20' (13.3333...), each pada is 3°20' (3.3333...)
+  const NAKSHATRA_DEGREES = 13 + 20/60;
+  const NAKSHATRA_PADA_DEGREES = NAKSHATRA_DEGREES / 4;
+  let nakshatra = Math.floor(degree / NAKSHATRA_DEGREES);
+  let pada = Math.floor((degree % NAKSHATRA_DEGREES) / NAKSHATRA_PADA_DEGREES) + 1; // 1..4
+  // Global pada index (1-based)
+  let globalPada = nakshatra * 4 + (pada - 1) + 1;
+  return globalPada; // 1 to 108
+}
+
+function placeMoonSymbolToPada(globalPada) {
+  // Assumes padaDomList is globally available as in your code
+  // Optional: first clear all previous moon symbols:
+  document.querySelectorAll('.moon-pada-marker').forEach(e => e.remove());
+
+  let padaDiv = padaDomList[globalPada];
+  if (padaDiv) {
+    padaDiv.innerHTML += `<span class="moon-pada-marker" style="font-size:1.3em; margin-left:5px;">🌙</span>`;
+  }
+}
 
 
     // ---------- DASA TREE RENDER with Date & Neat Indent, and CLICK-TO-HIGHLIGHT ----------
@@ -828,6 +851,13 @@ rasiData.forEach(rasi => {
         alert("சந்திரன் நீளம் சரிபார்க்கவும்.");
         return;
       }
+let moon_deg = Number(document.getElementById("moon_deg").value);
+let moon_min = Number(document.getElementById("moon_min").value);
+let moon_sec = Number(document.getElementById("moon_sec").value);
+
+let globalPada = getMoonPadaIndex(moon_deg, moon_min, moon_sec);
+placeMoonSymbolToPada(globalPada);
+
       let dob = new Date(dobStr);
       if(isNaN(dob.getTime())) {
         alert("பிறந்த தேதி சரிபார்க்கவும்.");
