@@ -851,12 +851,7 @@ function placeMoonSymbolToPada(globalPada) {
         alert("சந்திரன் நீளம் சரிபார்க்கவும்.");
         return;
       }
-let moon_deg = Number(document.getElementById("moon_deg").value);
-let moon_min = Number(document.getElementById("moon_min").value);
-let moon_sec = Number(document.getElementById("moon_sec").value);
 
-let globalPada = getMoonPadaIndex(moon_deg, moon_min, moon_sec);
-placeMoonSymbolToPada(globalPada);
 
       let dob = new Date(dobStr);
       if(isNaN(dob.getTime())) {
@@ -882,7 +877,13 @@ placeMoonSymbolToPada(globalPada);
   // Highlight and trigger bhavam function (assuming it accepts pada index)
   highlightPadaRange3(padaIndex); 
   
-  
+  // After drawChartGrid() or renderAll();
+let moon_deg = Number(document.getElementById("moon_deg").value);
+let moon_min = Number(document.getElementById("moon_min").value);
+let moon_sec = Number(document.getElementById("moon_sec").value);
+let globalPada = getMoonPadaIndex(moon_deg, moon_min, moon_sec);
+placeMoonSymbolToPada(globalPada);
+
 
 
     }
